@@ -33,14 +33,15 @@ export default {
         }),
       },
       {
-        hid: 'gtag',
-        innerHTML: readFileSync(resolveByConfig('gtag.js'), {
+        hid: 'hmt',
+        innerHTML: readFileSync(resolveByConfig('hmt.js'), {
           encoding: 'utf-8',
         }),
       },
     ],
     __dangerouslyDisableSanitizersByTagID: {
       gtag: ['innerHTML'],
+      hmt: ['innerHTML'],
     },
   },
 
