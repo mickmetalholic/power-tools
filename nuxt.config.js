@@ -32,6 +32,12 @@ export default {
           encoding: 'utf-8',
         }),
       },
+      {
+        hid: 'gtag',
+        innerHTML: readFileSync(resolveByConfig('gtag.js'), {
+          encoding: 'utf-8',
+        }),
+      },
     ],
     __dangerouslyDisableSanitizersByTagID: {
       gtag: ['innerHTML'],
