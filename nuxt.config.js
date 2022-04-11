@@ -1,4 +1,10 @@
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
 import colors from 'vuetify/es5/util/colors'
+
+function resolveByConfig(...args) {
+  return resolve(__dirname, './config', ...args)
+}
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -6,8 +12,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - power-tools',
-    title: 'power-tools',
+    titleTemplate: '%s | power-utils',
+    title: 'power-utils',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -15,6 +21,21 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        async: true,
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-SQCWGRDMTG',
+      },
+      {
+        hid: 'gtag',
+        innerHTML: readFileSync(resolveByConfig('gtag.js'), {
+          encoding: 'utf-8',
+        }),
+      },
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      gtag: ['innerHTML'],
+    },
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
