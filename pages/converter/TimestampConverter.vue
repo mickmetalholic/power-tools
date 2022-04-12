@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'TimeStamp',
+  name: 'TimestampConverter',
 }
 </script>
