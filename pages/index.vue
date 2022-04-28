@@ -1,16 +1,28 @@
 <template>
   <div>
-    <div class="text-h3">All utilities</div>
+    <div class="text-h3">All Utilities</div>
 
     <div class="list">
-      <v-row justify="left" align="center">
-        <v-col v-for="(utility, index) in utilities" :key="index" cols="3">
+      <v-row justify="start" align="center">
+        <v-col
+          v-for="(
+            { title, description, icon, to, disabled }, index
+          ) in utilConfigList"
+          :key="index"
+          cols="3"
+        >
           <v-hover v-slot="{ hover }">
             <v-card
-              :class="`elevation-${hover ? 24 : 6}`"
-              class="transition-swing"
+              :hover="hover"
+              :to="to"
+              :disabled="disabled"
+              :color="hover ? '#2e2e2e' : '#1e1e1e'"
+              height="300px"
+              class="card"
             >
-              <v-card-title>{{ utility.name }}</v-card-title>
+              <v-card-title>{{ title }}</v-card-title>
+              <v-card-text>{{ description }}</v-card-text>
+              <v-icon x-large class="icon">{{ icon }}</v-icon>
             </v-card>
           </v-hover>
         </v-col>
@@ -19,40 +31,29 @@
   </div>
 </template>
 
-<script>
-const utilities = [
-  {
-    name: 'timestamp',
-  },
-  {
-    name: 'timestamp',
-  },
-  {
-    name: 'timestamp',
-  },
-  {
-    name: 'timestamp',
-  },
-  {
-    name: 'timestamp',
-  },
-  {
-    name: 'timestamp',
-  },
-]
+<script lang="ts">
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   name: 'IndexPage',
   data() {
     return {
-      utilities,
+      utilConfigList: this.$utilConfigList,
     }
   },
-}
+})
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .list {
   margin-top: 30px;
+
+  .card {
+    .icon {
+      position: absolute;
+      left: 0;
+      right: 0;
+    }
+  }
 }
 </style>

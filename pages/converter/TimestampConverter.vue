@@ -1,11 +1,11 @@
 <template>
-  <v-row>
-    <v-col class="text-center"> time </v-col>
-  </v-row>
+  <timestamp-converter-comp />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'TimestampConverter',
-}
+})
 </script>
