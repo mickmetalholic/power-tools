@@ -1,129 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://www.googletagmanager.com/gtag/js?id=G-SQCWGRDMTG"></script>
-  <meta name="baidu-site-verification" content="code-7pnylDNzlc">
-  <script>
-    window.dataLayer = window.dataLayer || []
-    function gtag() {
-      dataLayer.push(arguments)
-    }
-    gtag('js', new Date())
-    gtag('config', 'G-SQCWGRDMTG')
-  </script>
-  <script>
-    var _hmt = window._hmt || []
-    ;(function () {
-      var hm = document.createElement('script')
-      hm.src = 'https://hm.baidu.com/hm.js?7710fb27909d531f1587e155b8cb301e'
-      var s = document.getElementsByTagName('script')[0]
-      s.parentNode.insertBefore(hm, s)
-    })()
-  </script>
-  <script src="https://unpkg.com/vue@next"></script>
-  <style>
-    body {
-      background-color: #1c3a6a;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://www.googletagmanager.com/gtag/js?id=G-SQCWGRDMTG"></script>
+    <meta name="baidu-site-verification" content="code-7pnylDNzlc" />
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', 'G-SQCWGRDMTG')
+    </script>
+    <script>
+      var _hmt = window._hmt || []
+      ;(function () {
+        var hm = document.createElement('script')
+        hm.src = 'https://hm.baidu.com/hm.js?7710fb27909d531f1587e155b8cb301e'
+        var s = document.getElementsByTagName('script')[0]
+        s.parentNode.insertBefore(hm, s)
+      })()
+    </script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+      body {
+        background-color: #1c3a6a;
+      }
 
-    .card {
-      border-radius: 20px;
-      border: 1px solid #fff;
-      text-align: center;
-      padding-bottom: 12px;
-      margin: 12px auto 0;
-    }
+      .card {
+        border-radius: 20px;
+        border: 1px solid #fff;
+        text-align: center;
+        padding-bottom: 12px;
+        margin: 12px auto 0;
+      }
 
-    .phone-numbers {
-      color: #ffffff;
-      border-color: #ffffff;
-      font-size: 36px;
-    }
+      .phone-numbers {
+        color: #fff;
+        border-color: #fff;
+        font-size: 36px;
+      }
 
-    .time {
-      color: #fff;
-      border-color: #fff;
-    }
+      .time {
+        color: #fff;
+        border-color: #fff;
+      }
 
-    .time-list {
-      text-align: left;
-      padding-left: 8px;
-    }
+      .time-list {
+        text-align: left;
+        padding-left: 8px;
+      }
 
-    .time-item {
-      height: 28px;
-      line-height: 28px;
-    }
+      .time-item {
+        height: 28px;
+        line-height: 28px;
+      }
 
-    .translated {
-      font-weight: bold;
-    }
+      .translated {
+        font-weight: bold;
+      }
 
-    .buttons {
-      display: flex;
-      justify-content: space-around;
-    }
+      .buttons {
+        display: flex;
+        justify-content: space-around;
+      }
 
-    .button {
-      width: 120px;
-      height: 40px;
-      color: #ffffff;
-      line-height: 40px;
-      text-align: center;
-      background-color: #1174a5;
-      user-select: none;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body>
-  <div id="app">
-    <div class="buttons">
-      <div
-        class="button"
-        @click="refresh"
-      >
-        刷新
+      .button {
+        width: 120px;
+        height: 40px;
+        color: #fff;
+        line-height: 40px;
+        text-align: center;
+        background-color: #1174a5;
+        user-select: none;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="buttons">
+        <div class="button" @click="refresh">刷新</div>
+
+        <div class="button" @click="clickShowTranslate" v-if="showTime">
+          答案
+        </div>
       </div>
 
-      <div
-        class="button"
-        @click="clickShowTranslate"
-        v-if="showTime"
-      >
-        答案
+      <div v-if="!showTime" class="card phone-numbers" @click="toggle">
+        <h1>电话号码</h1>
+        <div v-for="phoneNumber in phoneNumberList">{{phoneNumber}}</div>
       </div>
-    </div>
-
-    <div
-      v-if="!showTime"
-      class="card phone-numbers"
-      @click="toggle"
-    >
-      <h1>电话号码</h1>
-      <div v-for="phoneNumber in phoneNumberList">
-        {{phoneNumber}}
-      </div>
-    </div>
-    <div
-      v-else
-      class="card time"
-      @click="toggle"
-    >
-      <h1>时间</h1>
-      <div class="time-list" v-for="time in timeList">
-        <div class="time-item">
-          {{time}}
-          <span v-if="showTranslate" class="translated"> - {{translateTime(time)}}</span>
+      <div v-else class="card time" @click="toggle">
+        <h1>时间</h1>
+        <div class="time-list" v-for="time in timeList">
+          <div class="time-item">
+            {{time}}
+            <span v-if="showTranslate" class="translated">
+              - {{translateTime(time)}}</span
+            >
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="/misc/japanese-numbers/index.js"></script>
-</body>
+    <script src="/misc/japanese-numbers/index.js"></script>
+  </body>
 </html>

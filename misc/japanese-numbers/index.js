@@ -23,7 +23,7 @@ const HOUR = [
   'にじゅういちじ',
   'にじゅうにじ',
   'にじゅうさんじ',
-  'にじゅうよじ'
+  'にじゅうよじ',
 ]
 
 const MINUTE_1_9 = [
@@ -35,18 +35,12 @@ const MINUTE_1_9 = [
   'ろっぷん',
   'しちふん',
   'はっぷん',
-  'きゅうふん'
+  'きゅうふん',
 ]
 
-const MINUTE_10_50 = [
-  'じゅ',
-  'にじゅ',
-  'さんじゅ',
-  'よんじゅ',
-  'ごじゅ'
-]
+const MINUTE_10_50 = ['じゅ', 'にじゅ', 'さんじゅ', 'よんじゅ', 'ごじゅ']
 
-const HALF_HOUR = 'はん';
+const HALF_HOUR = 'はん'
 
 const app = Vue.createApp({
   data() {
@@ -65,25 +59,35 @@ const app = Vue.createApp({
       return Math.floor(Math.random() * Math.pow(10, length))
     },
     formatPhoneNumber(n) {
-      return n < 10 ? `00${n}` : (n < 100 ? `0${n}` : n)
+      return n < 10 ? `00${n}` : n < 100 ? `0${n}` : n
     },
     generatePhoneNumbers() {
-      this.phoneNumberList = Array.from({ length: 10 })
-        .map(_ => `${this.formatPhoneNumber(this.generateRandomNumber(3))}-${this.formatPhoneNumber(this.generateRandomNumber(3))}-${this.formatPhoneNumber(this.generateRandomNumber(4))}`)
+      this.phoneNumberList = Array.from({ length: 10 }).map(
+        (_) =>
+          `${this.formatPhoneNumber(
+            this.generateRandomNumber(3)
+          )}-${this.formatPhoneNumber(
+            this.generateRandomNumber(3)
+          )}-${this.formatPhoneNumber(this.generateRandomNumber(4))}`
+      )
     },
     formatTime(n) {
       return n < 10 ? `0${n}` : n
     },
     generateTimeList() {
-      this.timeList = Array.from({ length: 18 })
-        .map(_ => `${this.formatTime(Math.floor(Math.random() * 24))}:${this.formatTime(Math.floor(Math.random() * 60))}`)
+      this.timeList = Array.from({ length: 18 }).map(
+        (_) =>
+          `${this.formatTime(Math.floor(Math.random() * 24))}:${this.formatTime(
+            Math.floor(Math.random() * 60)
+          )}`
+      )
     },
     translateHour(h) {
-      return HOUR[h];
+      return HOUR[h]
     },
     translateMinute(m) {
       if (m === 0) {
-        return '';
+        return ''
       }
 
       const units = m % 10
@@ -91,12 +95,12 @@ const app = Vue.createApp({
 
       if (units === 0) {
         if (m === 30) {
-          return HALF_HOUR;
+          return HALF_HOUR
         } else {
           return `${MINUTE_10_50[tens - 1]}っぷん`
         }
       } else if (m < 10) {
-        return MINUTE_1_9[units - 1];
+        return MINUTE_1_9[units - 1]
       } else {
         return `${MINUTE_10_50[tens - 1]}う${MINUTE_1_9[units - 1]}`
       }
@@ -108,14 +112,14 @@ const app = Vue.createApp({
     refresh() {
       this.generatePhoneNumbers()
       this.generateTimeList()
-      this.showTranslate = false;
+      this.showTranslate = false
     },
     toggle() {
       this.showTime = !this.showTime
     },
     clickShowTranslate() {
-      this.showTranslate = !this.showTranslate;
-    }
+      this.showTranslate = !this.showTranslate
+    },
   },
 })
 
