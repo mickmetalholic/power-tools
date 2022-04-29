@@ -77,6 +77,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/sitemap',
   ],
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -84,6 +85,12 @@ export default {
     manifest: {
       lang: 'en',
     },
+  },
+
+  // sitemap module configuration: https://sitemap.nuxtjs.org/
+  sitemap: {
+    hostname: 'https://devutilsapp.com',
+    gzip: true,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
