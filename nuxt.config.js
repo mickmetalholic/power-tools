@@ -12,8 +12,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s | power-utils',
-    title: 'power-utils',
+    titleTemplate: '%s | Power Utils',
+    title: 'Power Utils',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -22,24 +22,27 @@ export default {
       { name: 'baidu-site-verification', content: 'code-7pnylDNzlc' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
-    script: [
-      {
-        async: true,
-        src: 'https://www.googletagmanager.com/gtag/js?id=G-SQCWGRDMTG',
-      },
-      {
-        hid: 'gtag',
-        innerHTML: readFileSync(resolveByConfig('gtag.js'), {
-          encoding: 'utf-8',
-        }),
-      },
-      {
-        hid: 'hmt',
-        innerHTML: readFileSync(resolveByConfig('hmt.js'), {
-          encoding: 'utf-8',
-        }),
-      },
-    ],
+    script:
+      process.env.NODE_ENV === 'production'
+        ? []
+        : [
+            {
+              async: true,
+              src: 'https://www.googletagmanager.com/gtag/js?id=G-SQCWGRDMTG',
+            },
+            {
+              hid: 'gtag',
+              innerHTML: readFileSync(resolveByConfig('gtag.js'), {
+                encoding: 'utf-8',
+              }),
+            },
+            {
+              hid: 'hmt',
+              innerHTML: readFileSync(resolveByConfig('hmt.js'), {
+                encoding: 'utf-8',
+              }),
+            },
+          ],
     __dangerouslyDisableSanitizersByTagID: {
       gtag: ['innerHTML'],
       hmt: ['innerHTML'],
