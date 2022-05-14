@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/generator/TsInterfaceGenerator", {data:[{}],fetch:{},mutations:void 0});
