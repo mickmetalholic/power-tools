@@ -58,6 +58,7 @@ export default {
     '~/plugins/vuetifyDateTimePicker.ts',
     '~/plugins/colorSchemePlugin.ts',
     '~/plugins/utils/index.ts',
+    { src: '~/plugins/codeMirrorPlugin/index.ts', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

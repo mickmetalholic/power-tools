@@ -29,7 +29,7 @@
       <v-toolbar-title v-text="title" />
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container :style="{ height: '100%' }">
         <Nuxt />
       </v-container>
     </v-main>

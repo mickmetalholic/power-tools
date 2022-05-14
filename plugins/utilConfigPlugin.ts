@@ -22,6 +22,12 @@ const utilConfigList: UtilConfig[] = [
     description: 'Convert timestamp to human-readable date and vice versa',
   },
   {
+    icon: 'mdi-typewriter',
+    title: 'Typescript Interface Generator',
+    to: '/generator/tsinterfacegenerator',
+    description: 'Generate TypeScript interface from JSON',
+  },
+  {
     title: 'Color Converter',
     disabled: true,
     description: 'Comming soon...',
