@@ -21,7 +21,7 @@ import {
 import { HomeIcon, MenuIcon, ChevronLeftIcon } from '@/common/icon'
 import { styled, Theme, CSSObject } from '@mui/material/styles'
 import { UTIL_LIST } from '../common/constants'
-import { lightTheme } from '../common/theme'
+import { darkTheme } from '../common/theme'
 import './_app.scss'
 
 const drawerWidth = 240
@@ -102,7 +102,7 @@ function App({ Component, pageProps }: AppProps) {
   const handleDrawerClose = () => setOpen(false)
 
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
 

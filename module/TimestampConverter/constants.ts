@@ -1,0 +1,1 @@
+export const KEY_PREFIX = '__TIMESTAMP_CONVERTER__'
