@@ -20,6 +20,7 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'baidu-site-verification', content: 'code-7pnylDNzlc' },
+      { name: 'google-site-verification', content: 'zy3uvbt704ryLO-gcXQ5WkYmDDgRgeyeEDtMzjRK6iA' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     script:
