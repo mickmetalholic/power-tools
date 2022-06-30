@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useTheme } from '@emotion/react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import dayjs from 'dayjs'
 import {
   Card,
@@ -13,6 +14,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
   Switch,
   TextField,
   Theme,
@@ -91,108 +93,167 @@ function TimeCard(): JSX.Element {
   const [time, setTime] = useState(new Date())
   const [isMilliseconds, setIsMilliseconds] = useState(true)
   const [formatType, setFormatType] = useState(FormatType.DATE_TIME)
-  const [isHour12, setIsHour12] = useState(false)
+  const [hour12, setHour12] = useState(false)
   const [showSnackbar, setShowSnackbar] = useState(false)
 
-  return (
-    <Card
-      sx={{
-        width: '90%',
-        height: '320px',
-        margin: 'auto',
-        backgroundColor: theme.palette.error.main,
+  const timeStamp = useMemo(() => {
+    return Math.floor(time.valueOf() / (isMilliseconds ? 1 : 1000))
+  }, [time, isMilliseconds])
+  const handleInputChange = useCallback((e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { value } = e.target
+    if (!value) {
+      return
+    }
+    if (value.length <= 10) {
+      setIsMilliseconds(false)
+      setTime(new Date(Number(value) * 1000))
+    } else {
+      setIsMilliseconds(true)
+      setTime(new Date(Number(value)))
+    }
+  }, [])
+
+  const ISOString = useMemo(() => time.toISOString(), [time])
+
+  const formatted = useMemo(() => {
+    if (formatType === FormatType.DATE_TIME) {
+      return time.toLocaleString('en', { hour12 })
+    } else if (formatType === FormatType.TIME) {
+      return time.toLocaleTimeString('en', { hour12 })
+    } else {
+      return time.toLocaleDateString('en')
+    }
+  }, [hour12, time, formatType])
+
+  const onCopy = useCallback(() => setShowSnackbar(true), [])
+
+  const renderSnackBar = () => (
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
       }}
-    >
-      <CardContent>
-        <Typography
-          variant="h5"
-          component="div"
-          style={{ color: '#fff' }}
-        >
-          Time #1
-        </Typography>
+      open={showSnackbar}
+      autoHideDuration={6000}
+      onClose={() => setShowSnackbar(false)}
+      message="Copied!"
+    />
+  )
 
-        <Divider />
+  return (
+    <>
+      {renderSnackBar()}
+      <Card
+        sx={{
+          width: '90%',
+          height: '320px',
+          margin: 'auto',
+          backgroundColor: theme.palette.error.main,
+        }}
+      >
+        <CardContent>
+          <Typography
+            variant="h5"
+            component="div"
+            style={{ color: '#fff' }}
+          >
+            Time #1
+          </Typography>
 
-        <Grid container spacing={2} style={{ marginTop: '4px' }}>
-          <Grid item xs={8}>
-            <TextField
-              label="Unix Timestamp"
-              variant="standard"
-              value={time.valueOf()}
-            />
-          </Grid>
-        </Grid>
+          <Divider />
 
-        <Grid container spacing={2}>
-          {timeComponents.map(({ label, getValue, setValue }) => (
-            <Grid item xs={2} key={label}>
+          <Grid container spacing={2} style={{ marginTop: '4px' }}>
+            <Grid item xs={4}>
               <TextField
-                label={label}
+                label="Unix Timestamp"
                 variant="standard"
-                inputProps={{
-                  type: 'number',
-                }}
-                margin="dense"
-                value={getValue(time)}
-                onChange={v => setValue(v.target.value, time, setTime)}
+                value={timeStamp}
+                onChange={handleInputChange}
               />
             </Grid>
-          ))}
-        </Grid>
+            <Grid item xs={1}>
+              <CopyToClipboard text={String(timeStamp)} onCopy={onCopy}>
+                <IconButton aria-label="content-copy">
+                  <ContentCopyIcon />
+                </IconButton>
+              </CopyToClipboard>
+            </Grid>
+          </Grid>
 
-        <Grid container spacing={2} style={{ marginTop: 0 }}>
-          <Grid item xs={6} style={{ lineHeight: '40px' }}>UTC(ISO 8601)</Grid>
-          <Grid item xs={5} style={{ lineHeight: '40px' }}>{time.toISOString()}</Grid>
-          <Grid item xs={1}>
-            <IconButton aria-label="content-copy">
-              <ContentCopyIcon />
-            </IconButton>
+          <Grid container spacing={2}>
+            {timeComponents.map(({ label, getValue, setValue }) => (
+              <Grid item xs={2} key={label}>
+                <TextField
+                  label={label}
+                  variant="standard"
+                  inputProps={{
+                    type: 'number',
+                  }}
+                  margin="dense"
+                  value={getValue(time)}
+                  onChange={v => setValue(v.target.value, time, setTime)}
+                />
+              </Grid>
+            ))}
           </Grid>
-        </Grid>
 
-        <Divider />
+          <Grid container spacing={2} style={{ marginTop: 0 }}>
+            <Grid item xs={6} style={{ lineHeight: '40px' }}>UTC(ISO 8601)</Grid>
+            <Grid item xs={5} style={{ lineHeight: '40px' }}>{ISOString}</Grid>
+            <Grid item xs={1}>
+              <CopyToClipboard text={ISOString} onCopy={onCopy}>
+                <IconButton aria-label="content-copy">
+                  <ContentCopyIcon />
+                </IconButton>
+              </CopyToClipboard>
+            </Grid>
+          </Grid>
 
-        <Grid container spacing={2} style={{ marginTop: 0 }}>
-          <Grid item xs={3} style={{ paddingTop: '8px' }}>
-            <FormControl variant="standard" sx={{ minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label">Format</InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={formatType}
-                onChange={e => setFormatType(e.target.value as FormatType)}
-                label="Age"
-              >
-                {formatTypeList.map(({ value, text }, index) => (
-                  <MenuItem value={value} key={index}>{text}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Divider />
+
+          <Grid container spacing={2} style={{ marginTop: 0 }}>
+            <Grid item xs={3} style={{ paddingTop: '8px' }}>
+              <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-standard-label">Format</InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={formatType}
+                  onChange={e => setFormatType(e.target.value as FormatType)}
+                  label="Age"
+                >
+                  {formatTypeList.map(({ value, text }, index) => (
+                    <MenuItem value={value} key={index}>{text}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={3}>
+              <FormGroup>
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={hour12}
+                      onChange={e => setHour12(e.target.checked)}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  )}
+                  label={hour12 ? '12' : '24'}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={5} style={{ lineHeight: '40px' }}>{formatted}</Grid>
+            <Grid item xs={1}>
+              <CopyToClipboard text={formatted} onCopy={onCopy}>
+                <IconButton aria-label="content-copy">
+                  <ContentCopyIcon />
+                </IconButton>
+              </CopyToClipboard>
+            </Grid>
           </Grid>
-          <Grid item xs={3}>
-            <FormGroup>
-              <FormControlLabel
-                control={(
-                  <Switch
-                    checked={isHour12}
-                    onChange={e => setIsHour12(e.target.checked)}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                  />
-                )}
-                label={isHour12 ? '12' : '24'}
-              />
-            </FormGroup>
-          </Grid>
-          <Grid item xs={5} style={{ lineHeight: '40px' }}>{time.toISOString()}</Grid>
-          <Grid item xs={1}>
-            <IconButton aria-label="content-copy">
-              <ContentCopyIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </>
   )
 }
 
